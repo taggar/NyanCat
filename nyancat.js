@@ -1,4 +1,6 @@
 window.addEventListener('load', changeButtonText, false);
+const body = document.getElementsByTagName('body')[0];
+const main = document.getElementById('main');
 
 
 const doge = document.getElementById('doge');
@@ -7,6 +9,7 @@ doge.addEventListener('mouseleave', hideIcon, false);
 doge.addEventListener('click', togglePicture, false);
 
 const dogpic = document.getElementById('dogpic');
+dogpic.addEventListener('click', rainNyanCats, false);
 
 function changeButtonText() {
     doge.innerHTML = "Woof!";
@@ -36,3 +39,24 @@ function togglePicture() {
         dogpic.style.display = "none";
     }
 }
+
+function rainNyanCats() {
+    console.log("rainNyanCats");
+    setBackground();
+    main.style.display = "none";
+
+}
+
+function createNyanCat() {
+    // maybe later, we'll see
+}
+
+function setBackground() {
+    body.style.backgroundImage = "url('naynback9_shop_preview.png')";
+}
+
+function removeBackground() {
+    body.style.backgroundImage = "none";
+
+}
+
