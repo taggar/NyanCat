@@ -44,11 +44,20 @@ function rainNyanCats() {
     console.log("rainNyanCats");
     setBackground();
     main.style.display = "none";
-
+    createNyanCat(10);
 }
 
-function createNyanCat() {
-    // maybe later, we'll see
+function createNyanCat(count) {
+    for (let i = 0; i < count; i++) {
+        let left = (i * 10 + 100) + 'px';
+        console.log(left);
+        let cat = document.createElement("img");
+        cat.setAttribute("src", "nayncat.png");
+        cat.style.position = "absolute";
+        cat.style.left = left;
+        cat.style.top = 0 + 'px';
+        body.appendChild(cat);
+    }
 }
 
 function setBackground() {
