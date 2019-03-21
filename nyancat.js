@@ -44,15 +44,41 @@ function rainNyanCats() {
     console.log("rainNyanCats");
     setBackground();
     main.style.display = "none";
-    createNyanCat(5);
+    rain(10, 5);
+}
+
+function rain(duration, numberOfCats) {
+    let catRow = [];
+    for (let t = 0; t < duration; t++) {
+        createNyanCat(numberOfCats);
+        catRow[t] = document.getElementsByClassName("cat");
+        setInterval(animateCats(catRow[t]), 10000);
+    }
+}
+
+function animateCats(cats) {
+    return function () {
+        for (let j = 0; j < cats.length; j++) {
+            cats[j].animate([
+                // keyframes
+                { transform: 'translateY(0px) translateX(0px)' },
+                { transform: 'translateY(100vh) translateX(100vw)' },
+            ], {
+                    // timing options
+                    duration: 10000,
+                    iterations: Infinity
+                });
+        }
+    };
 }
 
 function createNyanCat(count) {
     for (let i = 0; i < count; i++) {
         let left = (i * parseInt(body.clientWidth) / count) + 'px';
-        console.log(left);
+
         let cat = document.createElement("img");
-        cat.setAttribute("src", "nayncat.png");
+        cat.setAttribute("src", "nyancat.png");
+        cat.setAttribute("class", "cat");
         cat.style.position = "absolute";
         cat.style.left = left;
         cat.style.top = 0 + 'px';
