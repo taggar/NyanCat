@@ -44,12 +44,12 @@ function rainNyanCats() {
     console.log("rainNyanCats");
     setBackground();
     main.style.display = "none";
-    createNyanCat(10);
+    createNyanCat(5);
 }
 
 function createNyanCat(count) {
     for (let i = 0; i < count; i++) {
-        let left = (i * 10 + 100) + 'px';
+        let left = (i * parseInt(body.clientWidth) / count) + 'px';
         console.log(left);
         let cat = document.createElement("img");
         cat.setAttribute("src", "nayncat.png");
