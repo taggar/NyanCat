@@ -58,8 +58,10 @@ function removeBackground() {
 
 // create a cat and add it to the tree
 function createNyanCat() {
-  // randomize position
-  let left = (Math.floor(parseInt(body.clientWidth) * Math.random()) + 'px');
+  // randomize position along the togglePicture// also gebnerate negative positions oterwiz=se the bottom left never gets rain
+    let left = Math.floor(parseInt(body.clientWidth) * Math.random());
+  left *=  Math.floor(Math.random()*2) == 1 ? 1 : -1;
+  left = left + 'px';
   let cat = document.createElement("img");
   cat.setAttribute("src", "nyancat.png");
   cat.classList.add("cat");
@@ -73,7 +75,7 @@ function createNyanCat() {
 
   // Let it rain cats
   function rainNyanCats() {
-    let numCats = 20;
+    let numCats = 50;
     let allCats = [];
     for (let i = 0; i < numCats; i++) {
       allCats[i] = createNyanCat();
@@ -97,7 +99,7 @@ function createNyanCat() {
           // timing options
           duration: 10000,
           iterations: Infinity,
-                    delay: i * 1000
+          delay: i * 500
         });
       };
                   }
