@@ -1,4 +1,5 @@
 // objects to manipulate and accompanying event listeners
+const audio = new Audio('nyancat.mp3');
 
 // containers
 window.addEventListener('load', changeButtonText, false);
@@ -75,6 +76,7 @@ function createNyanCat() {
 
   // Let it rain cats
   function rainNyanCats() {
+  audio.play();
     let numCats = 50;
     let allCats = [];
     for (let i = 0; i < numCats; i++) {
