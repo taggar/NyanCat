@@ -1,97 +1,103 @@
+// objects to manipulate and accompanying event listeners
+
+// containers
 window.addEventListener('load', changeButtonText, false);
 const body = document.getElementsByTagName('body')[0];
 const main = document.getElementById('main');
 
-
+// the doge button
 const doge = document.getElementById('doge');
 doge.addEventListener('mouseenter', showIcon, false);
 doge.addEventListener('mouseleave', hideIcon, false);
 doge.addEventListener('click', togglePicture, false);
 
+// the dog picture
 const dogpic = document.getElementById('dogpic');
 dogpic.addEventListener('click', rainNyanCats, false);
 
+// Change button appearance
 function changeButtonText() {
-    doge.innerHTML = "Woof!";
+  doge.innerHTML = "Woof!";
 }
 
 function showIcon() {
-    doge.innerHTML = "<img src='doggo.png'>";
+  doge.innerHTML = "<img src='doggo.png'>";
 }
 
 function hideIcon() {
-    doge.innerHTML = "Woof!";
+  doge.innerHTML = "Woof!";
 }
 
+// Show and hide picture each time button is clicked
 function togglePicture() {
-
-    if (dogpic.style.display == null || dogpic.style.display == "none") {
-        let top = Math.floor(Math.random() * Math.floor(60)) + "%";
-        let left = Math.floor(Math.random() * Math.floor(60)) + "% ";
-        let width = Math.floor(Math.random() * Math.floor(100)) + "%";
-        console.log(top + " " + left + " " + width);
-        dogpic.style.top = top;
-        dogpic.style.left = left;
-        dogpic.style.width = width + 'px';
-        dogpic.style.width = width;
-        dogpic.style.display = "block";
-    } else {
-        dogpic.style.display = "none";
-    }
+  if (dogpic.style.display == null || dogpic.style.display == "none") {
+    // display the iamge at a different postion and size each timeout
+    let top = Math.floor(Math.random() * Math.floor(60)) + "%";
+    let left = Math.floor(Math.random() * Math.floor(60)) + "% ";
+    let width = Math.floor(Math.random() * Math.floor(100)) + "%";
+    //console.log(top + " " + left + " " + width);
+    dogpic.style.top = top;
+    dogpic.style.left = left;
+    dogpic.style.width = width;
+    dogpic.style.display = "block";
+  } else {
+    dogpic.style.display = "none";
+  }
 }
 
-function rainNyanCats() {
-    console.log("rainNyanCats");
-    setBackground();
-    main.style.display = "none";
-    rain(10, 5);
-}
 
-function rain(duration, numberOfCats) {
-    let catRow = [];
-    for (let t = 0; t < duration; t++) {
-        createNyanCat(numberOfCats);
-        catRow[t] = document.getElementsByClassName("cat");
-        setInterval(animateCats(catRow[t]), 10000);
-    }
-}
 
-function animateCats(cats) {
-    return function () {
-        for (let j = 0; j < cats.length; j++) {
-            cats[j].animate([
-                // keyframes
-                { transform: 'translateY(0px) translateX(0px)' },
-                { transform: 'translateY(100vh) translateX(100vw)' },
-            ], {
-                    // timing options
-                    duration: 10000,
-                    iterations: Infinity
-                });
-        }
-    };
-}
-
-function createNyanCat(count) {
-    for (let i = 0; i < count; i++) {
-        let left = (i * parseInt(body.clientWidth) / count) + 'px';
-
-        let cat = document.createElement("img");
-        cat.setAttribute("src", "nyancat.png");
-        cat.setAttribute("class", "cat");
-        cat.style.position = "absolute";
-        cat.style.left = left;
-        cat.style.top = 0 + 'px';
-        body.appendChild(cat);
-    }
-}
-
+// set and remove background image
 function setBackground() {
-    body.style.backgroundImage = "url('naynback9_shop_preview.png')";
+  body.style.backgroundImage = "url('naynback9_shop_preview.png')";
 }
 
 function removeBackground() {
-    body.style.backgroundImage = "none";
-
+  body.style.backgroundImage = "none";
 }
 
+// create a cat and add it to the tree
+function createNyanCat() {
+  // randomize position
+  let left = (Math.floor(parseInt(body.clientWidth) * Math.random()) + 'px');
+  let cat = document.createElement("img");
+  cat.setAttribute("src", "nyancat.png");
+  cat.classList.add("cat");
+  cat.style.position = "absolute";
+  cat.style.left = left;
+  cat.style.top = -100 + 'px';
+  body.appendChild(cat);
+  console.log(left);
+  return cat;
+}
+
+  // Let it rain cats
+  function rainNyanCats() {
+    let numCats = 20;
+    let allCats = [];
+    for (let i = 0; i < numCats; i++) {
+      allCats[i] = createNyanCat();
+    }
+    setBackground();
+    main.style.display = "none";
+    setInterval(animateCats(allCats), 1000);
+  }
+
+  function animateCats(cats) {
+    for (let i = 0; i < cats.length; i++) {
+        cats[i].animate([
+          // keyframes
+          {
+            transform: 'translateY(0px) translateX(0px)'
+          },
+          {
+            transform: 'translateY(100vh) translateX(100vw)'
+          },
+        ], {
+          // timing options
+          duration: 10000,
+          iterations: Infinity,
+                    delay: i * 1000
+        });
+      };
+                  }
