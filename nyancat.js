@@ -32,7 +32,8 @@ function hideIcon() {
 // Show and hide picture each time button is clicked
 function togglePicture() {
 	if (dogpic.style.display == null || dogpic.style.display == "none") {
-		// calculate a different position and size to display the image each time
+		// calculate a different position and size to display the image each
+		// time
 		let top = Math.floor(Math.random() * Math.floor(60)) + "%";
 		let left = Math.floor(Math.random() * Math.floor(60)) + "% ";
 		let width = Math.floor(Math.random() * Math.floor(100)) + "%";
@@ -59,7 +60,8 @@ function removeBackground() {
 function createNyanCat() {
 	// randomize position along the top of the viewport
 	let left = Math.floor(parseInt(body.clientWidth) * Math.random());
-	// also generate negative positions otherwise the bottom left never gets rain
+	// also generate negative positions otherwise the bottom left never gets
+	// rain
 	left *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
 	left = left + 'px';
 	// and now create the cat
@@ -68,7 +70,8 @@ function createNyanCat() {
 	cat.classList.add("cat");
 	cat.style.position = "absolute";
 	cat.style.left = left;
-	cat.style.top = -100 + 'px'; // image is 100px high and we want to hide it to begin with
+	cat.style.top = -100 + 'px'; // image is 100px high and we want to hide
+	// it to begin with
 	body.appendChild(cat);
 	console.log(left);
 	return cat;
@@ -84,12 +87,20 @@ function rainNyanCats() {
 	main.style.display = "none";
 	setBackground();
 	audio.play();
-	setInterval(animateCats(allCats), 1000);
+	animateCats(allCats);
+	setInterval(function() {
+		if (audio.currentTime > 10) {
+			audio.pause();
+		}
+	}, 1000);
+
+	zapCats(allCats);
 }
 
 function animateCats(cats) {
-	for (let i = 0; i < cats.length; i++) {
-		cats[i].animate([
+
+	cats.forEach(function(cat) {
+		cat.animate([
 		// keyframes
 		{
 			transform : 'translateY(0px) translateX(0px)'
@@ -97,10 +108,16 @@ function animateCats(cats) {
 			transform : 'translateY(100vh) translateX(100vw)'
 		}, ], {
 			// timing options
-			duration : 10000,
-			iterations : 1,
-			delay : i * 500
+			duration : 1000,
+			iterations : 9,
+			delay : Math.random() * 5000
 		});
-	}
-	;
+
+	});
+}
+
+function zapCats(cats) {
+	cats.forEach(function(cat) {
+//		cat.remove();
+	});
 }
