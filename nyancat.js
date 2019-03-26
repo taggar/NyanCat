@@ -1,4 +1,7 @@
-// objects to manipulate and accompanying event listeners
+/*
+Objects to manipulate and accompanying event listeners
+*/
+
 const audio = new Audio('nyancat.mp3');
 
 // containers
@@ -10,11 +13,15 @@ const main = document.getElementById('main');
 const doge = document.getElementById('doge');
 doge.addEventListener('mouseenter', showIcon, false);
 doge.addEventListener('mouseleave', hideIcon, false);
-doge.addEventListener('click', togglePicture, false);
+doge.addEventListener('click', toggleDogPicture, false);
 
 // the dog picture
 const dogpic = document.getElementById('dogpic');
 dogpic.addEventListener('click', rainNyanCats, false);
+
+/* 
+Dog button behaviour 
+*/
 
 // Change button appearance
 function changeButtonText() {
@@ -26,18 +33,17 @@ function showIcon() {
 }
 
 function hideIcon() {
-  doge.innerHTML = "Woof!";
+  changeButtonText();
 }
 
 // Show and hide picture each time button is clicked
-function togglePicture() {
+function toggleDogPicture() {
   if (dogpic.style.display == null || dogpic.style.display == "none") {
-    // calculate a different position and size to display the image each
-    // time
+    // Calculate a different position and size for the image each time
     let top = Math.floor(Math.random() * Math.floor(60)) + "%";
     let left = Math.floor(Math.random() * Math.floor(60)) + "% ";
     let width = Math.floor(Math.random() * Math.floor(100)) + "%";
-
+    // Set the calculated properties
     dogpic.style.top = top;
     dogpic.style.left = left;
     dogpic.style.width = width;
@@ -47,7 +53,26 @@ function togglePicture() {
   }
 }
 
-// set and remove background image
+/*
+Then come the cats
+*/
+
+/*function rain() {
+  create cats
+  hide main
+  set background
+  animate cats
+  play audio
+  
+  after 10 seconds
+  stop audio
+  zap cats
+  remove background
+  show main
+}*/
+
+
+// Set and remove background image
 function setBackground() {
   body.style.backgroundImage = "url('naynback9_shop_preview.png')";
 }
@@ -56,68 +81,105 @@ function removeBackground() {
   body.style.backgroundImage = "none";
 }
 
-// create a cat and add it to the tree
+
+
+/*
+Create a cat, place it at a random position along the top border  and add it to the tree
+*/
 function createNyanCat() {
-  // randomize position along the top of the viewport
-  let left = Math.floor(parseInt(body.clientWidth) * Math.random());
-  // also generate negative positions otherwise the bottom left never gets
-  // rain
-  left *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
-  left = left + 'px';
-  // and now create the cat
+  // Create the cat
   let cat = document.createElement("img");
   cat.src = "nyancat.png";
   cat.classList.add("cat");
   cat.style.position = "absolute";
+  /*
+  Randomize position along the top of the viewport, and also generate negative
+  positions otherwise the bottom left never gets rain.
+  Also move the image above the top as we want to hide it initially.
+  */
+  let left = Math.floor(parseInt(body.clientWidth) * Math.random());
+  left *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+  left = left + 'px';
   cat.style.left = left;
-  cat.style.top = -100 + 'px'; // image is 100px high and we want to hide
-  // it to begin with
+  cat.style.top = -50 + 'px';
+
   body.appendChild(cat);
-  console.log(left);
   return cat;
+}
+
+function createLitterOfCats() {
+  /* create a whole litter of cats */
+  let numCats = Math.floor(Math.random() * 50);
+  let allCats = [];
+  console.log("Making " + numCats + " cats.");
+  for (let i = 0; i < numCats; i++) {
+    allCats[i] = createNyanCat();
+  }
+  return allCats;
 }
 
 // Let it rain cats
 function rainNyanCats() {
-  let numCats = 50;
-  let allCats = [];
-  for (let i = 0; i < numCats; i++) {
-    allCats[i] = createNyanCat();
-  }
-  main.style.display = "none";
+  let allCats = createLitterOfCats();
+  main.style.visibility = "hidden";
+  dogpic.style.display = "none";
   setBackground();
+
+  audio.volume = 1;
   audio.play();
   animateCats(allCats);
-  setInterval(function () {
-    if (audio.currentTime > 10) {
-      audio.pause();
-    }
-  }, 1000);
-
-  zapCats(allCats);
+  setTimeout(function () {
+    fadeAudio();
+    zapCats(allCats);
+    removeBackground();
+    main.style.visibility = "visible";
+  }, 10000);
 }
 
-function animateCats(cats) {
-
-  cats.forEach(function (cat) {
+function animateCats(allCats) {
+  allCats.forEach(function (cat) {
+    // calculate random angle
+    let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
+    // calculate random speed
+    let speed = Math.floor(Math.random() * 1000 + 3000);
+    console.log(xTarget);
     cat.animate([
       // keyframes
       {
         transform: 'translateY(0px) translateX(0px)'
       }, {
-        transform: 'translateY(100vh) translateX(100vw)'
+        transform: 'translateY(100vh) translateX(' + xTarget + 'px)'
       },], {
         // timing options
-        duration: 3000,
+        duration: speed,
         iterations: 9,
         delay: Math.random() * 5000
       });
-
   });
 }
 
 function zapCats(cats) {
   cats.forEach(function (cat) {
-    //		cat.remove();
+    cat.remove();
   });
+}
+
+
+
+function fadeAudio() {
+  let fadeStep = 0.1;
+  console.log(audio.volume);
+  setInterval(function () {
+    // Only fade if past the fade out point or not at zero already
+    if (audio.volume >= fadeStep) {
+      audio.volume = Math.min(audio.volume - 0.01, 1);
+      console.log(audio.volume);
+    }
+    // When volume at zero stop all the intervalling
+    if (audio.volume === 0.0) {
+      clearInterval(fadeAudio);
+    }
+  }, 20);
+  audio.volume = 0;
+  audio.pause;
 }
