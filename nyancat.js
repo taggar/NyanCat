@@ -100,14 +100,15 @@ function createNyanCat() {
   left *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
   left = left + 'px';
   cat.style.left = left;
-  cat.style.top = -50 + 'px';
+  cat.style.top = -60 + 'px';
+  cat.style.transform = 'none';
   body.appendChild(cat);
   return cat;
 }
 
 function createLitterOfCats() {
   /* create a whole litter of cats */
-  let numCats = Math.floor(Math.random() * 50) + 10;
+  let numCats = Math.floor(Math.random() * 100) + 10;
   let allCats = [];
   console.log("Making " + numCats + " cats.");
   for (let i = 0; i < numCats; i++) {
@@ -122,17 +123,19 @@ function rainNyanCats() {
   main.style.visibility = "hidden";
   dogpic.style.display = "none";
   setBackground();
-
-  audio.volume = 1;
+  // audio.volume = 1;
   audio.play();
   animateCats(allCats);
+  console.log('Before timeout: ' + new Date());
   window.setTimeout(function () {
+    console.log('Entering timeout.')
     fadeAudio();
     zapCats(allCats);
     removeBackground();
     main.style.visibility = "visible";
+    console.log('After timeout: ' + new Date());
   }, 10000);
-
+  audio.pause;
 }
 
 function animateCats(allCats) {
@@ -140,12 +143,13 @@ function animateCats(allCats) {
     // calculate random angle
     let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
     // calculate random speed
-    let speed = Math.floor(Math.random() * 10);
-    console.log('xTarget: ' + xTarget);
-    console.log('speed: ' + speed);
-    cat.style.transition = 'all ' + speed + 's';
+    let speed = (Math.random() * allCats.length) % 10 + 2;
+    // console.log('xTarget: ' + xTarget);
+    // console.log('speed: ' + speed);
+    cat.style.transition = 'all ' + speed + 's ease-in ' + Math.floor(Math.random() * allCats.length / 10) + 's';
     cat.style.top = '100vh';
     cat.style.left = xTarget + 'px';
+    cat.style.transform = 'rotateY(7200deg)';
   });
 }
 
@@ -158,17 +162,18 @@ function zapCats(cats) {
 
 
 function fadeAudio() {
-  let fadeStep = 0.1;
+  console.log('Inside fadeout: ' + new Date());
+
   setInterval(function () {
     if (audio.volume > 0.0) {
+      console.log('Entering interval.');
       audio.volume -= 0.1;
       console.log(audio.volume);
     }
     // When volume at zero stop all the intervalling
-    if (audio.volume < 0.2) {
+    if (audio.volume <= 0.2) {
       clearInterval(fadeAudio);
       audio.volume = 0;
     }
-  }, 200);
-  audio.pause;
+  }, 100);
 }
