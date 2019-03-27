@@ -109,7 +109,7 @@ function createNyanCat() {
 
 function createLitterOfCats() {
   /* create a whole litter of cats */
-  let numCats = Math.floor(Math.random() * 50);
+  let numCats = Math.floor(Math.random() * 50) + 10;
   let allCats = [];
   console.log("Making " + numCats + " cats.");
   for (let i = 0; i < numCats; i++) {
@@ -139,10 +139,11 @@ function rainNyanCats() {
 function animateCats(allCats) {
   allCats.forEach(function (cat) {
     // calculate random angle
-    let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
+    let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth)) / 2;
     // calculate random speed
-    let speed = Math.floor(Math.random() * 1000 + 3000);
-    console.log(xTarget);
+    let speed = Math.floor(Math.random() * 1000) + 3000;
+    console.log('xTarget: ' + xTarget);
+    console.log('speed: ' + speed);
     cat.animate([
       // keyframes
       {
@@ -153,7 +154,7 @@ function animateCats(allCats) {
         // timing options
         duration: speed,
         iterations: 9,
-        delay: Math.random() * 5000
+        delay: Math.floor(Math.random() * 5000)
       });
   });
 }
@@ -168,18 +169,16 @@ function zapCats(cats) {
 
 function fadeAudio() {
   let fadeStep = 0.1;
-  console.log(audio.volume);
   setInterval(function () {
-    // Only fade if past the fade out point or not at zero already
-    if (audio.volume >= fadeStep) {
-      audio.volume = Math.min(audio.volume - 0.01, 1);
+    if (audio.volume > 0.0) {
+      audio.volume -= 0.1;
       console.log(audio.volume);
     }
     // When volume at zero stop all the intervalling
-    if (audio.volume === 0.0) {
+    if (audio.volume < 0.2) {
       clearInterval(fadeAudio);
+      audio.volume = 0;
     }
-  }, 20);
-  audio.volume = 0;
+  }, 200);
   audio.pause;
 }
