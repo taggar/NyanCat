@@ -53,25 +53,6 @@ function toggleDogPicture() {
   }
 }
 
-/*
-Then come the cats
-*/
-
-/*function rain() {
-  create cats
-  hide main
-  set background
-  animate cats
-  play audio
-  
-  after 10 seconds
-  stop audio
-  zap cats
-  remove background
-  show main
-}*/
-
-
 // Set and remove background image
 function setBackground() {
   body.style.backgroundImage = "url('naynback9_shop_preview.png')";
