@@ -90,7 +90,6 @@ function createNyanCat() {
   // Create the cat
   let cat = document.createElement("img");
   cat.src = "nyancat.png";
-  cat.classList.add("cat");
   cat.style.position = "absolute";
   /*
   Randomize position along the top of the viewport, and also generate negative
@@ -102,7 +101,6 @@ function createNyanCat() {
   left = left + 'px';
   cat.style.left = left;
   cat.style.top = -50 + 'px';
-
   body.appendChild(cat);
   return cat;
 }
@@ -128,34 +126,26 @@ function rainNyanCats() {
   audio.volume = 1;
   audio.play();
   animateCats(allCats);
-  setTimeout(function () {
+  window.setTimeout(function () {
     fadeAudio();
     zapCats(allCats);
     removeBackground();
     main.style.visibility = "visible";
   }, 10000);
+
 }
 
 function animateCats(allCats) {
   allCats.forEach(function (cat) {
     // calculate random angle
-    let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth)) / 2;
+    let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
     // calculate random speed
-    let speed = Math.floor(Math.random() * 1000) + 3000;
+    let speed = Math.floor(Math.random() * 10);
     console.log('xTarget: ' + xTarget);
     console.log('speed: ' + speed);
-    cat.animate([
-      // keyframes
-      {
-        transform: 'translateY(0px) translateX(0px)'
-      }, {
-        transform: 'translateY(100vh) translateX(' + xTarget + 'px)'
-      },], {
-        // timing options
-        duration: speed,
-        iterations: 9,
-        delay: Math.floor(Math.random() * 5000)
-      });
+    cat.style.transition = 'all ' + speed + 's';
+    cat.style.top = '100vh';
+    cat.style.left = xTarget + 'px';
   });
 }
 
