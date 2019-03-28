@@ -28,8 +28,7 @@ body {
 	width: 100px;
 }
 
-.test {
-	display: flex;
-	justify-content:;
-	align-content:
+.cat {
+	position: absolute;
+	top: -60px;
 }
