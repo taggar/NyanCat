@@ -48,7 +48,7 @@ function rainNyanCats() {
   var rain = setInterval(function () {
     let cat = createCat();
     animateCat(cat);
-  }, 100);
+  }, 10);
   setTimeout(function () {
     fadeAudio();
     clearInterval(rain);
