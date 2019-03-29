@@ -11,9 +11,9 @@ const audio = new Audio('nyancat.mp3');
 // Accompanying event listeners
 window.addEventListener('load', changeButtonText);
 doge.addEventListener('mouseenter', showIcon);
-doge.addEventListener('mouseleave', hideIcon, false);
-doge.addEventListener('click', toggleDogPicture, false);
-dogpic.addEventListener('click', rainNyanCats, false);
+doge.addEventListener('mouseleave', hideIcon);
+doge.addEventListener('click', toggleDogPicture);
+dogpic.addEventListener('click', rainNyanCats);
 
 function changeButtonText() {
   doge.innerHTML = 'Woof!';
@@ -31,30 +31,31 @@ function hideIcon() {
 function toggleDogPicture() {
   if (dogpic.style.display == null || dogpic.style.display == 'none') {
     // Calculate a different position and size for the image each time
-    let top = Math.floor(Math.random() * 60) + '%';
-    let left = Math.floor(Math.random() * 60) + '% ';
-    let width = (Math.floor(Math.random() * 400) + 10) + 'px';
-    // Set the calculated properties
-    dogpic.style.top = top;
-    dogpic.style.left = left;
-    dogpic.style.width = width;
+    dogpic.style.top = Math.floor(Math.random() * 60) + '%';
+    dogpic.style.left = Math.floor(Math.random() * 60) + '% ';
+    dogpic.style.width = (Math.floor(Math.random() * 400) + 10) + 'px';
     dogpic.style.display = 'block';
   } else {
     dogpic.style.display = 'none';
   }
 }
 
-
-function removeBackground() {
-  body.style.backgroundImage = 'none';
-}
-
 function rainNyanCats() {
   body.style.backgroundImage = backgroundImage;
   main.style.visibility = 'hidden';
-
-  animateCat();
-
+  audio.volume = 1;
+  audio.play();
+  var rain = setInterval(function () {
+    let cat = createCat();
+    animateCat(cat);
+  }, 100);
+  setTimeout(function () {
+    fadeAudio();
+    clearInterval(rain);
+    zapCats();
+    body.style.backgroundImage = "none";
+    main.style.visibility = "visible";
+  }, 10000);
 }
 
 function createCat() {
@@ -66,25 +67,45 @@ function createCat() {
   positions otherwise the bottom left never gets rain.
   Also move the image above the top as we want to hide it initially.
   */
-  let left = Math.floor(parseInt(body.clientWidth) * Math.random()) * (Math.floor(Math.random() * 2) == 1 ? 1 : -1);
-  //left *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
-  left = left + 'px';
-  cat.style.left = left;
+  let left = Math.floor(parseInt(body.clientWidth) * Math.random());
+  left *= Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+  cat.style.left = left + 'px';
   cat.style.transform = 'none';
   body.appendChild(cat);
+  return cat;
 }
 
-function animateCat() {
-  let cat = createCat();
-  setTimeout(function (cat) {
+function animateCat(cat) {
+  setTimeout(function () {
     let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
-    // calculate random speed
-    let speed = (Math.random() * xTarget) % 10 + 2;
-    // console.log('xTarget: ' + xTarget);
-    // console.log('speed: ' + speed);
-    cat.style.transition = 'all ' + speed + 's ease-in ' + Math.floor(Math.random() * xTarget / 10) + 's';
+    let speed = (Math.random() * xTarget) % 10 + 2;  // calculate random speed
+    cat.style.transition = 'all ' + speed + 's ease-in ' + Math.floor(Math.random() * parseInt(body.clientWidth) / 100) + 's';
     cat.style.top = '100vh';
     cat.style.left = xTarget + 'px';
     cat.style.transform = 'rotateY(7200deg)';
+  }, 10);
+}
+
+function fadeAudio() {
+  console.log('Inside fadeout: ' + new Date());
+  var fadeAudio = setInterval(function () {
+    if (audio.volume > 0.0) {
+      console.log('Entering interval.');
+      audio.volume -= 0.1;
+      console.log(audio.volume);
+    }
+    // When volume at zero stop all the intervalling
+    if (audio.volume <= 0.2) {
+      audio.volume = 0;
+      audio.pause();
+      clearInterval(fadeAudio);
+      console.log('Faded out: ' + new Date());
+    }
   }, 100);
+}
+
+function zapCats() {
+  Array.from(document.getElementsByClassName('cat')).forEach(function (cat) {
+    cat.remove();
+  });
 }
