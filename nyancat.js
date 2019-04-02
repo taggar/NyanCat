@@ -76,14 +76,12 @@ function createCat() {
 }
 
 function animateCat(cat) {
-  setTimeout(function () {
-    let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
-    let speed = (Math.random() * xTarget) % 10 + 2;  // calculate random speed
-    cat.style.transition = 'all ' + speed + 's ease-in ' + Math.floor(Math.random() * parseInt(body.clientWidth) / 100) + 's';
-    cat.style.top = '100vh';
-    cat.style.left = xTarget + 'px';
-    cat.style.transform = 'rotateY(7200deg)';
-  }, 10);
+  let xTarget = Math.floor(Math.random() * parseInt(body.clientWidth));
+  let speed = (Math.random() * xTarget) % 10 + 2;  // calculate random speed
+  cat.style.transition = 'all ' + speed + 's ease-in ' + Math.floor(Math.random() * parseInt(body.clientWidth) / 100) + 's';
+  cat.style.top = '100vh';
+  cat.style.left = xTarget + 'px';
+  cat.style.transform = 'rotateY(7200deg)';
 }
 
 function fadeAudio() {
