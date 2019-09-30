@@ -29,5 +29,7 @@ Have you ever heard of [Nyan Cat](https://www.google.com/search?q=nyan+cat&oq=ny
 
 ## Result
 
+Careful, contains audio ...!
+
 https://taggar.github.io/NyanCat/index.html
 
